@@ -42,13 +42,14 @@ public class ClubDeportivoAltoRendimientoTest {
 
     @Test
     @DisplayName("Calculo de ingresos correcto")
-    void calcularIngresos()
-    {
+    void calcularIngresos() throws ClubException {
         double cantidad = 0;
+        String[] datos = new String[]{"456B", "Pilates", "12", "5", "50.0"};
+        clubAR.anyadirActividad(datos);
 
         cantidad = clubAR.ingresos();
 
-        // assertEquals(cantidad, 0);
+        assertEquals(cantidad, 312.5);
     }
 
 

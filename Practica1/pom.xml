@@ -11,8 +11,8 @@
 	<!--Propiedades del proyecto y maven-->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<!--<maven.compiler.source>17</maven.compiler.source>-->
-		<!--<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>-->
+	<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 	</properties>
 
 	<!--Reutilizar versiones para las dependencias -->
