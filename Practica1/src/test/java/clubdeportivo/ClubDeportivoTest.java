@@ -21,7 +21,33 @@ public class ClubDeportivoTest {
     }
 
     @Test
-    @DisplayName("Anyadir actividad grupo nuevo")
+    @DisplayName("Crear club deportivo con numero de grupos 0 o negativos")
+    void crearClubConCantidadDeGruposNulaONegativa(){
+        assertThrows(ClubException.class, () -> {
+            new ClubDeportivo("UMA", 0);
+        });
+    }
+
+    @Test
+    @DisplayName("Anyadir actividad con datos")
+    void correctAnyadirActividad() throws ClubException{
+        String [] datos = {"123A","Kizomba","10","10","25.0"};
+        club.anyadirActividad(datos);
+
+        assertTrue(club.toString().contains("Kizomba"));
+    }
+
+    @Test
+    @DisplayName("Anyadir actividad con datos incorrectos")
+    void incorrectAnyadirActividad() throws ClubException {
+        String[] datos = {"A", "Kizomba", "a", "b", "c"};
+        assertThrows(ClubException.class, () ->{
+            club.anyadirActividad(datos);
+        });
+    }
+
+    @Test
+    @DisplayName("Anyadir actividad con grupo nuevo")
     void correctAnyadirActividadGrupoNuevo() throws ClubException{
         club.anyadirActividad(pilates);
 
@@ -29,11 +55,22 @@ public class ClubDeportivoTest {
     }
 
     @Test
-    @DisplayName("Anyadir actividad grupo existente")
+    @DisplayName("Anyadir actividad con grupo existente")
     void correctAnyadirActividadGrupoExistente() throws ClubException{
+        club.anyadirActividad(pilates);
+        //Anyadimos otra actividad al grupo existente de pilates
         club.anyadirActividad(pilates);
 
         assertTrue(club.toString().contains(pilates.toString()));
+    }
+
+    @Test
+    @DisplayName("Anyadir actividad en grupo nulo")
+    void anyadirActividadEnGrupoNulo() throws ClubException{
+        Grupo g = null;
+        assertThrows(ClubException.class, () -> {
+           club.anyadirActividad(g);
+        });
     }
 
     @Test
