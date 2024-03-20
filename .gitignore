@@ -16,6 +16,7 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -107,5 +108,3 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 *.xml
-Practica1/pom.xml
-Practica1/pom.xml
