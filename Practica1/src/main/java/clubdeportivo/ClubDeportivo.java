@@ -50,8 +50,9 @@ public class ClubDeportivo {
 		}
 		int pos = buscar(g);
 		if (pos == -1) { // El grupo es nuevo
-			Grupo[] newArray = Arrays.copyOf(grupos, ngrupos+1);
-			grupos = newArray;
+			// Se detectaba que se accedia fuera del array por lo que anyadimos codigo
+			// para aumentar el tamanyo del array
+            grupos = Arrays.copyOf(grupos, ngrupos+1);
 			grupos[ngrupos] = g;
 			ngrupos++;
 		} else { // El grupo ya existe --> modificamos las plazas

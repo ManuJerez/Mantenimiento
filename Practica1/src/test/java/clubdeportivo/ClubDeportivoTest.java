@@ -1,8 +1,11 @@
+/*
+AUTORES: Manuel Jesús Jerez Sánchez y Pablo Astudillo Fraga
+ */
+
 package clubdeportivo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +25,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Crear club deportivo con numero de grupos 0 o negativos")
-    void crearClubConCantidadDeGruposNulaONegativa(){
+    void noCrearClubConCantidadDeGruposNulaONegativa(){
         assertThrows(ClubException.class, () -> {
             new ClubDeportivo("UMA", 0);
         });
@@ -30,7 +33,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Anyadir actividad con datos")
-    void correctAnyadirActividad() throws ClubException{
+    void anyadirActividadConDatos() throws ClubException{
         String [] datos = {"123A","Kizomba","10","10","25.0"};
         club.anyadirActividad(datos);
 
@@ -39,7 +42,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Anyadir actividad con datos incorrectos")
-    void incorrectAnyadirActividad() throws ClubException {
+    void noAnyadirActividadConDatosIncorrectos() throws ClubException {
         String[] datos = {"A", "Kizomba", "a", "b", "c"};
         assertThrows(ClubException.class, () ->{
             club.anyadirActividad(datos);
@@ -48,7 +51,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Anyadir actividad con grupo nuevo")
-    void correctAnyadirActividadGrupoNuevo() throws ClubException{
+    void anyadirActividadGrupoNuevo() throws ClubException{
         club.anyadirActividad(pilates);
 
         assertTrue(club.toString().contains(pilates.toString()));
@@ -56,17 +59,20 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Anyadir actividad con grupo existente")
-    void correctAnyadirActividadGrupoExistente() throws ClubException{
-        club.anyadirActividad(pilates);
-        //Anyadimos otra actividad al grupo existente de pilates
-        club.anyadirActividad(pilates);
+    void anyadirActividadGrupoExistente() throws ClubException{
+        club.anyadirActividad(pilates); //Anyadimos un grupo al club
+        Grupo spinning = new Grupo("789A","Spinning",10,2,30.0);
+        club.anyadirActividad(spinning); //Anyadimos otro grupo al club
 
-        assertTrue(club.toString().contains(pilates.toString()));
+        //Anyadimos otra actividad al grupo existente de spinning
+        club.anyadirActividad(spinning);
+
+        assertTrue(club.toString().contains(spinning.toString()));
     }
 
     @Test
     @DisplayName("Anyadir actividad en grupo nulo")
-    void anyadirActividadEnGrupoNulo() throws ClubException{
+    void anyadirActividadGrupoNulo() throws ClubException{
         Grupo g = null;
         assertThrows(ClubException.class, () -> {
            club.anyadirActividad(g);
@@ -85,7 +91,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Matricular menos personas que plazas disponibles")
-    void correctMatricularMenosPlazasQueDisponibles() throws ClubException{
+    void matricularMenosPlazasQueDisponibles() throws ClubException{
         club.anyadirActividad(pilates);
         int npersonas = 1;
         int plazasLibres = club.plazasLibres("Pilates");
@@ -97,7 +103,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Matricular mismas personas que plazas disponibles")
-    void correctMatricularTodasPlazas() throws ClubException{
+    void matricularTodasPlazas() throws ClubException{
         club.anyadirActividad(pilates);
         int npersonas = club.plazasLibres("Pilates");
 
@@ -108,7 +114,7 @@ public class ClubDeportivoTest {
 
     @Test
     @DisplayName("Matricular mas personas que plazas disponibles")
-    void correctMatricularMasPlazasQueDisponibles() throws ClubException{
+    void noMatricularMasPlazasQueDisponibles() throws ClubException{
         club.anyadirActividad(pilates);
         int npersonas = club.plazasLibres("Pilates");
 
@@ -118,10 +124,9 @@ public class ClubDeportivoTest {
 
     }
 
-
     @Test
     @DisplayName("Calcular ingresos")
-    void correctCalculodeIngresos() throws ClubException{
+    void calcularIngresos() throws ClubException{
         club.anyadirActividad(pilates);
         assertTrue(club.ingresos() > 0);
     }

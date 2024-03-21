@@ -1,3 +1,7 @@
+/*
+AUTORES: Manuel Jesús Jerez Sánchez y Pablo Astudillo Fraga
+ */
+
 package clubdeportivo;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +17,38 @@ public class GrupoTest {
     @BeforeEach
     void inicializarGrupo() throws ClubException {
         grupo = new Grupo ("456B", "Pilates", 8, 5, 50.0);
+    }
+
+    @Test
+    @DisplayName("No crear grupo con numero de plazas incorrecto")
+    void noCrearGrupoNumPlazasIncorrecto() throws ClubException{
+        assertThrows(ClubException.class, () ->{
+            new Grupo("146", "Zumba", 0, 4, 5);
+        });
+    }
+
+    @Test
+    @DisplayName("No crear grupo con numero de matriculados incorrecto")
+    void noCrearGrupoNumMatriculadosIncorrecto() throws ClubException{
+        assertThrows(ClubException.class, () ->{
+            new Grupo("146", "Zumba", 8, -3, 5);
+        });
+    }
+
+    @Test
+    @DisplayName("No crear grupo con tarifa incorrecta")
+    void noCrearGrupoTarifaIncorrecta() throws ClubException{
+        assertThrows(ClubException.class, () ->{
+            new Grupo("146", "Zumba", 8, 4, -2);
+        });
+    }
+
+    @Test
+    @DisplayName("No crear grupo con menos plazas que matriculados")
+    void noCrearGrupoMenosPlazasQueMatriculados() throws ClubException{
+        assertThrows(ClubException.class, () ->{
+            new Grupo("643", "Zumba", 8, 10, 34);
+        });
     }
 
     @Test
@@ -93,6 +129,22 @@ public class GrupoTest {
     }
 
     @Test
+    @DisplayName("No actualizar plazas con numero de plazas negativo o cero")
+    void noActualizarPlazasCantidadIncorrecta() throws ClubException{
+        assertThrows(ClubException.class, () ->{
+            grupo.actualizarPlazas(-5);
+        });
+    }
+
+    @Test
+    @DisplayName("No actualizar plazas con numero de plazas menor que numero de matriculados")
+    void noActualizarPlazasCantidadMenorQueMatriculados() throws ClubException{
+        assertThrows(ClubException.class, () -> {
+            grupo.actualizarPlazas(4);
+        });
+    }
+
+    @Test
     @DisplayName("Matricular")
     void matricular() throws ClubException {
         int matriculados;
@@ -101,6 +153,31 @@ public class GrupoTest {
         matriculados = grupo.getMatriculados();
 
         assertEquals(8, matriculados);
+    }
+
+    @Test
+    @DisplayName("No matricular si no hay plazas libres")
+    void noMatricularSinPlazasLibres() throws ClubException{
+        int num = grupo.plazasLibres() + 2;
+        assertThrows(ClubException.class, () -> {
+           grupo.matricular(num);
+        });
+    }
+
+    @Test
+    @DisplayName("No matricular cantidad negativa")
+    void noMatricularCantidadNegativa() throws ClubException {
+        assertThrows(ClubException.class, () -> {
+            grupo.matricular(-2);
+        });
+    }
+
+    @Test
+    @DisplayName("No matricular cantidad nula")
+    void noMatricularCantidadNula() throws ClubException {
+        assertThrows(ClubException.class, () -> {
+           grupo.matricular(0);
+        });
     }
 
     @Test
