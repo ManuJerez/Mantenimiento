@@ -16,11 +16,15 @@ public class ClubDeportivoTest {
     ClubDeportivo club;
     Grupo[] grupos;
     Grupo pilates;
+    Grupo crossfit;
+    Grupo yoga;
 
     @BeforeEach
     void setup() throws ClubException{
         club = new ClubDeportivo("UMA",1);
         pilates = new Grupo("456B","Pilates",8,5,50.0);
+        crossfit = new Grupo("800A", "Crossfit", 10, 7, 25.0);
+        yoga = new Grupo("473U", "Yoga", 12, 3, 40.0);
     }
 
     @Test
@@ -90,6 +94,16 @@ public class ClubDeportivoTest {
     }
 
     @Test
+    @DisplayName("Comprobar plazas libres de una actividad que no existe")
+    void comprobarPlazasLibresInexistente() throws ClubException{
+        club.anyadirActividad(pilates);
+
+        int plazas = club.plazasLibres("Crossfit");
+
+        assertEquals(0, plazas);
+    }
+
+    @Test
     @DisplayName("Matricular menos personas que plazas disponibles")
     void matricularMenosPlazasQueDisponibles() throws ClubException{
         club.anyadirActividad(pilates);
@@ -122,6 +136,34 @@ public class ClubDeportivoTest {
            club.matricular("Pilates", npersonas+1); 
         });
 
+    }
+
+    @Test
+    @DisplayName("Matricular personas con mas de un grupo")
+    void matricularPersonasConMasGrupos() throws ClubException{
+        club.anyadirActividad(pilates);
+        club.anyadirActividad(crossfit);
+        club.anyadirActividad(yoga);
+
+        club.matricular("Crossfit", 2);
+
+        int plazasLibres = club.plazasLibres("Crossfit");
+
+        assertEquals(1,plazasLibres);
+    }
+
+    @Test
+    @DisplayName("Matricular maximas personas en el primer grupo")
+    void matricularMaxPersonasEnPrimerGrupo() throws ClubException{
+        club.anyadirActividad(pilates);
+        club.anyadirActividad(crossfit);
+        club.anyadirActividad(yoga);
+
+        club.matricular("Pilates", 3);
+
+        int plazasLibres = club.plazasLibres("Pilates");
+
+        assertEquals(0,plazasLibres);
     }
 
     @Test

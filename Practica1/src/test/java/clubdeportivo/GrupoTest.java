@@ -225,6 +225,17 @@ public class GrupoTest {
     }
 
     @Test
+    @DisplayName("Equals desiguales debido a la actividad")
+    void equalsDesigualAct() throws ClubException {
+        Grupo grupo2 = new Grupo ("456B", "Crossfit", 8, 5, 50.0);
+        boolean iguales;
+
+        iguales = grupo.equals(grupo2);
+
+        assertFalse(iguales);
+    }
+
+    @Test
     @DisplayName("Hash iguales")
     void hashIguales() throws ClubException {
         Grupo grupo2 = new Grupo ("456B", "Pilates", 8, 5, 50.0);

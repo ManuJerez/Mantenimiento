@@ -20,20 +20,56 @@ public class ClubDeportivoAltoRendimientoTest {
     }
 
     @Test
-    @DisplayName("Crear el club de alto rendimiento en el rango negativo")
-    void crearClubNegativo() throws ClubException {
+    @DisplayName("Crear el club de alto rendimiento con maximo negativo")
+    void crearClubMaxNeg() throws ClubException {
         assertThrows(ClubException.class, () -> {
-            new ClubDeportivoAltoRendimiento("ClubAR", -5, 0);
+            new ClubDeportivoAltoRendimiento("ClubAR", -5, 25);
         });
     }
 
     @Test
-    @DisplayName("Crear el club de alto rendimiento en el rango negativo con tam")
-    void crearClubNegativoConTam() throws ClubException {
+    @DisplayName("Crear el club de alto rendimiento en el incremento negativo")
+    void crearClubIncNeg() throws ClubException {
         assertThrows(ClubException.class, () -> {
-            new ClubDeportivoAltoRendimiento("ClubAR", 8, -5, 0);
+            new ClubDeportivoAltoRendimiento("ClubAR", 10, -5);
         });
     }
+
+    @Test
+    @DisplayName("Crear el club de alto rendimiento en el maximo negativo con tam")
+    void crearClubNegativoConTamMaxNeg() throws ClubException {
+        assertThrows(ClubException.class, () -> {
+            new ClubDeportivoAltoRendimiento("ClubAR", 8, -5, 3);
+        });
+    }
+
+    @Test
+    @DisplayName("Crear el club de alto rendimiento en el incremento negativo con tam")
+    void crearClubNegativoConTamIncNeg() throws ClubException {
+        assertThrows(ClubException.class, () -> {
+            new ClubDeportivoAltoRendimiento("ClubAR", 8, 8, -5);
+        });
+    }
+
+    /*
+    @Test
+    @DisplayName("Crear el club de alto rendimiento con tam")
+    void crearClubTam() throws ClubException {
+        ClubDeportivoAltoRendimiento club = new ClubDeportivoAltoRendimiento("ClubAR",10, 10, 25.0);
+
+        assertTrue(club instanceof ClubDeportivoAltoRendimiento);
+    }
+
+    @Test
+    @DisplayName("Crear el club de alto rendimiento")
+    void crearClub() throws ClubException {
+        ClubDeportivoAltoRendimiento club = new ClubDeportivoAltoRendimiento("ClubAR", 10, 25.0);
+
+        assertTrue(club instanceof ClubDeportivoAltoRendimiento);
+    }*/
+
+
+
 
     @Test
     @DisplayName("Añadir actividades con un array de datos menor que 5")

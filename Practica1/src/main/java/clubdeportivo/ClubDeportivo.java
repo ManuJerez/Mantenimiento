@@ -74,7 +74,7 @@ public class ClubDeportivo {
 
 	public void matricular(String actividad, int npersonas) throws ClubException {
 		int plazas = plazasLibres(actividad);
-		if (plazas < npersonas) {
+		if (plazas < npersonas || npersonas <= 0) {
 			throw new ClubException("ERROR: no hay suficientes plazas libres para esa actividad en el club.");
 		}
 		int i = 0;
