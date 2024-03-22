@@ -8,8 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClubDeportivoAltoRendimientoTest {
 
@@ -18,6 +17,31 @@ public class ClubDeportivoAltoRendimientoTest {
     @BeforeEach
     void inicializarClubSinTam() throws ClubException {
         clubAR = new ClubDeportivoAltoRendimiento("ClubAR", 10, 25.0);
+    }
+
+    @Test
+    @DisplayName("Crear el club de alto rendimiento en el rango negativo")
+    void crearClubNegativo() throws ClubException {
+        assertThrows(ClubException.class, () -> {
+            new ClubDeportivoAltoRendimiento("ClubAR", -5, 0);
+        });
+    }
+
+    @Test
+    @DisplayName("Crear el club de alto rendimiento en el rango negativo con tam")
+    void crearClubNegativoConTam() throws ClubException {
+        assertThrows(ClubException.class, () -> {
+            new ClubDeportivoAltoRendimiento("ClubAR", 8, -5, 0);
+        });
+    }
+
+    @Test
+    @DisplayName("Añadir actividades con un array de datos menor que 5")
+    void numDatosInsuficiente() throws ClubException {
+        String[] datos = {"1","2","3"};
+        assertThrows(ClubException.class, () -> {
+            clubAR.anyadirActividad(datos);
+        });
     }
 
     @Test
@@ -42,6 +66,15 @@ public class ClubDeportivoAltoRendimientoTest {
         clubAR.anyadirActividad(datos);
 
         assertTrue(clubAR.toString().contains(g.toString()));
+    }
+
+    @Test
+    @DisplayName("Anyadir una actividad con un formato incorrecto")
+    void anyadirActividadFormatoIncorrecto() throws ClubException {
+        String[] datos = {"a","b","c","d","e"};
+        assertThrows(ClubException.class, () -> {
+            clubAR.anyadirActividad(datos);
+        });
     }
 
     @Test

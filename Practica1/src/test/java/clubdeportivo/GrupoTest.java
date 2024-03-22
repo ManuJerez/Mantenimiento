@@ -203,6 +203,17 @@ public class GrupoTest {
     }
 
     @Test
+    @DisplayName("Equals con un objeto diferente de grupo")
+    void equalsConObjetoIncorrecto() throws ClubException {
+        double prueba = 0;
+        boolean iguales;
+
+        iguales = grupo.equals(prueba);
+
+        assertFalse(iguales);
+    }
+
+    @Test
     @DisplayName("Equals desiguales")
     void equalsDesigual() throws ClubException {
         Grupo grupo2 = new Grupo ("800A", "Pilates", 8, 5, 50.0);
