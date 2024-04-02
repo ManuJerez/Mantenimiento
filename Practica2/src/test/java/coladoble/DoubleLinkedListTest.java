@@ -1,118 +1,192 @@
 /*
 AUTORES: Manuel Jesús Jerez Sánchez y Pablo Astudillo Fraga
- */
+*/
 
-import coladoble.DoubleLinkedList;
-import coladoble.DoubleLinkedQueueException;
+package coladoble;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DoubleLinkedListTest {
 
-    private DoubleLinkedList<Integer> linkedList;
+    DoubleLinkedList<Integer> linkedList;
 
-    @BeforeEach
-    void setup(){
-        linkedList = new DoubleLinkedList();
+    @Nested
+    @DisplayName("En lista vacia")
+    class EmptyDoubleLinkedList{
+        @BeforeEach
+        void setup(){
+            linkedList = new DoubleLinkedList();
+        }
+
+        @Test
+        @DisplayName("Anyadir nodo al principio de lista vacia")
+        void anyadirNodoAlPrincipioListaVacia(){
+            linkedList.prepend(1);
+
+            assertEquals(1, linkedList.first());
+        }
+
+
+        @Test
+        @DisplayName("Anyadir nodo al final de lista vacia")
+        void anyadirNodoAlFinalListaVacia(){
+            linkedList.append(1);
+
+            assertEquals(1, linkedList.last());
+        }
+
+        @Test
+        @DisplayName("Borrar primer nodo lista vacia")
+        void borrarPrimerNodoListaVacia(){
+            assertThrows(DoubleLinkedQueueException.class, () -> {
+                linkedList.deleteFirst();
+            });
+        }
+
+        @Test
+        @DisplayName("Borrar ultimo nodo lista vacia")
+        void borrarUltimoNodoListaVacia(){
+            assertThrows(DoubleLinkedQueueException.class, () ->{
+                linkedList.deleteLast();
+            });
+        }
+
+        @Test
+        @DisplayName("Obtener primer nodo de la lista")
+        void obtenerPrimerNodo(){
+            assertThrows(NullPointerException.class, () ->{
+                linkedList.first();
+            });
+        }
+
+        @Test
+        @DisplayName("Obtener ultimo nodo de la lista")
+        void obtenerUltimoNodo(){
+            assertThrows(NullPointerException.class, () ->{
+                linkedList.last();
+            });
+        }
+
+        @Test
+        @DisplayName("Obtener tamanyo de la lista")
+        void obtenerTamanyo(){
+            int tamanyo = linkedList.size();
+
+            assertEquals(0, tamanyo);
+        }
+
     }
 
-    @Test
-    @DisplayName("Anyadir nodo al principio de lista vacia")
-    void anyadirNodoAlPrincipioListaVacia(){
-        linkedList.prepend(1);
+    @Nested
+    @DisplayName("En lista con un elemento")
+    class DoubleLinkedListWithOnlyOneElement{
+        @BeforeEach
+        void setup(){
+            linkedList = new DoubleLinkedList<>();
+            linkedList.prepend(0);
+        }
 
-        assertEquals(1, linkedList.first());
-    }
-
-    @Test
-    @DisplayName("Anyadir nodo al principio de lista no vacia")
-    void anyadirNodoAlPrincipioListaNoVacia(){
-        linkedList.prepend(1);
-        linkedList.prepend(0);
-
-        assertEquals(0, linkedList.first());
-    }
-
-    @Test
-    @DisplayName("Anyadir nodo al final de lista vacia")
-    void anyadirNodoAlFinalListaVacia(){
-        linkedList.append(1);
-
-        assertEquals(1, linkedList.last());
-    }
-
-    @Test
-    @DisplayName("Borrar primer nodo lista vacia")
-    void borrarPrimerNodoListaVacia(){
-        assertThrows(DoubleLinkedQueueException.class, () -> {
+        @Test
+        @DisplayName("Borrar primer nodo")
+        void borrarPrimeNodo(){
             linkedList.deleteFirst();
-        });
+            assertThrows(NullPointerException.class, () -> {
+                linkedList.last();
+            });
+        }
+
+        @Test
+        @DisplayName("Borrar ultimo nodo")
+        void borrarUltimoNodo(){
+            linkedList.deleteLast();
+            assertThrows(NullPointerException.class, () -> {
+                linkedList.first();
+            });
+        }
     }
 
-    @Test
-    @DisplayName("Borrar primer nodo lista no vacia")
-    void borrarPrimerNodoListaNoVacia(){
-        linkedList.prepend(1);
-        linkedList.append(2);
+    @Nested
+    @DisplayName("En lista con mas de un elemento")
+    class NotEmptyDoubleLinkedList{
 
-        linkedList.deleteFirst();
+        @BeforeEach
+        void setup(){
+            linkedList = new DoubleLinkedList<>();
+            linkedList.prepend(0);
+            linkedList.append(1);
+            linkedList.append(2);
+        }
 
-        assertEquals(linkedList.first(), 2);
+        @Test
+        @DisplayName("Anyadir nodo al principio de lista no vacia")
+        void anyadirNodoAlPrincipioListaNoVacia(){
+            linkedList.prepend(7);
+
+            Integer first = linkedList.first();
+
+            assertEquals(7, first);
+        }
+
+        @Test
+        @DisplayName("Anyadir nodo al final de lista no vacia")
+        void anyadirNodoAlFinalListaNoVacia(){
+            linkedList.append(7);
+
+            Integer last = linkedList.last();
+
+            assertEquals(7, last);
+        }
+
+        @Test
+        @DisplayName("Borrar primer nodo lista no vacia")
+        void borrarPrimerNodoListaNoVacia(){
+            linkedList.deleteFirst();
+
+            Integer first = linkedList.first();
+
+            assertEquals(1, first);
+        }
+
+        @Test
+        @DisplayName("Borrar ultimo nodo lista no vacia")
+        void borrarUltimoNodoListaNoVacia(){
+            linkedList.deleteLast();
+
+            Integer last = linkedList.last();
+
+            assertEquals(1, last);
+        }
+
+        @Test
+        @DisplayName("Obtener primer nodo de la lista")
+        void obtenerPrimerNodo(){
+            Integer first = linkedList.first();
+
+            assertEquals(0, first);
+        }
+
+        @Test
+        @DisplayName("Obtener ultimo nodo de la lista")
+        void obtenerUltimoNodo(){
+            Integer last = linkedList.last();
+
+            assertEquals(2, last);
+        }
+
+        @Test
+        @DisplayName("Obtener tamanyo de la lista")
+        void obtenerTamanyo(){
+            int tamanyo = linkedList.size();
+
+            assertEquals(3, tamanyo);
+        }
     }
-
-    @Test
-    @DisplayName("Borrar ultimo nodo lista vacia")
-    void borrarUltimoNodoListaVacia(){
-        assertThrows(DoubleLinkedQueueException.class, () ->{
-           linkedList.deleteLast();
-        });
-    }
-
-    @Test
-    @DisplayName("Borrar ultimo nodo lista no vacia")
-    void borrarUltimoNodoListaNoVacia(){
-        linkedList.prepend(1);
-        linkedList.append(2);
-
-        linkedList.deleteLast();
-
-        assertEquals(linkedList.last(), 1);
-    }
-
-    @Test
-    @DisplayName("Obtener primer nodo de la lista")
-    void obtenerPrimerNodo(){
-        linkedList.prepend(1);
-        linkedList.append(2);
-        linkedList.prepend(3);
-
-        assertEquals(linkedList.first(), 3);
-    }
-
-    @Test
-    @DisplayName("Obtener ultimo nodo de la lista")
-    void obtenerUltimoNodo(){
-        linkedList.append(1);
-        linkedList.append(2);
-        linkedList.append(3);
-        assertEquals(linkedList.last(), 3);
-    }
-
-    @Test
-    @DisplayName("Obtener tamanyo de la lista")
-    void obtenerTamanyo(){
-        linkedList.append(1);
-        linkedList.append(2);
-        linkedList.append(3);
-
-        assertEquals(linkedList.size(), 3);
-    }
-
 }
 
 
