@@ -5,8 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LinkedNodeTest {
     LinkedNode<Integer> node;
@@ -76,6 +75,14 @@ public class LinkedNodeTest {
         }
 
         @Test
+        @DisplayName("Set item correcto")
+        void correctSetItem(){
+            node.setItem(7);
+
+            assertEquals(7, node.getItem());
+        }
+
+        @Test
         @DisplayName("Predecesores y progenitores correctos")
         void nodeNeighbours()
         {
@@ -97,6 +104,24 @@ public class LinkedNodeTest {
         void correctLastNode()
         {
             assertTrue(!prev.isLastNode() && !node.isLastNode() && next.isLastNode());
+        }
+
+        @Test
+        @DisplayName("No es nodo terminal siendo nodo intermedio")
+        void correctNoTerminalNode(){
+            assertTrue(node.isNotATerminalNode());
+        }
+
+        @Test
+        @DisplayName("Es nodo terminal siendo primer nodo")
+        void correctTerminalNodeFirstNode(){
+            assertFalse(prev.isNotATerminalNode());
+        }
+
+        @Test
+        @DisplayName("Es nodo terminal siendo ultimo nodo")
+        void correctTerminalNodeLastNode(){
+            assertFalse(next.isNotATerminalNode());
         }
     }
 
