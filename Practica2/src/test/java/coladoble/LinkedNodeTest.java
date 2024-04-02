@@ -1,3 +1,7 @@
+/*
+AUTORES: Manuel Jesús Jerez Sánchez y Pablo Astudillo Fraga
+*/
+
 package coladoble;
 
 import org.junit.jupiter.api.BeforeEach;
