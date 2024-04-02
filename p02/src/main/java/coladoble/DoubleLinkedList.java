@@ -43,7 +43,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
             LinkedNode<T> aux = last;
             aux.setNext(node);
             node.setPrevious(aux);
-            first = node;
+            last = node;
         }
         size++;
     }
