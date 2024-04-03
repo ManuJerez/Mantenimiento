@@ -98,7 +98,7 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
     public int size() {
         return size;
     }
-
+    /* 
     @Override
     public T get(int index) {
         if(index < 0)
@@ -174,4 +174,5 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
             node = node.getNext();
         }
     }
+    */
 }
