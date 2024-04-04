@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -25,7 +27,7 @@ public class DoubleLinkedListTest {
         }
 
         @Test
-        @DisplayName("Anyadir nodo al principio de lista vacia")
+        @DisplayName("Anyadir nodo al principio lista vacia")
         void anyadirNodoAlPrincipioListaVacia(){
             linkedList.prepend(1);
 
@@ -34,7 +36,7 @@ public class DoubleLinkedListTest {
 
 
         @Test
-        @DisplayName("Anyadir nodo al final de lista vacia")
+        @DisplayName("Anyadir nodo al final lista vacia")
         void anyadirNodoAlFinalListaVacia(){
             linkedList.append(1);
 
@@ -81,6 +83,37 @@ public class DoubleLinkedListTest {
             assertEquals(0, tamanyo);
         }
 
+        @Test
+        @DisplayName("Obtener lanza excepcion")
+        void get_EmptyList_ThrowException(){
+            assertThrows(DoubleLinkedQueueException.class, () ->{
+               linkedList.get(0);
+            });
+        }
+
+        @Test
+        @DisplayName("Contiene devuelve false")
+        void contains_EmptyList_IsFalse(){
+            assertFalse(linkedList.contains(0));
+        }
+
+        @Test
+        @DisplayName("Borrar lanza excepcion")
+        void remove_EmptyList_ThrowException(){
+            assertThrows(DoubleLinkedQueueException.class, () ->{
+                linkedList.remove(3);
+            });
+        }
+
+        @Test
+        @DisplayName("Ordenar no produce cambios")
+        void sort_WithoutChanges(){
+            linkedList.sort(Comparator.naturalOrder());
+            assertThrows(NullPointerException.class, () -> {
+                linkedList.first();
+            });
+        }
+
     }
 
     @Nested
@@ -93,7 +126,7 @@ public class DoubleLinkedListTest {
         }
 
         @Test
-        @DisplayName("Borrar primer nodo")
+        @DisplayName("Borrar primer nodo lista unitaria")
         void borrarPrimeNodo(){
             linkedList.deleteFirst();
             assertThrows(NullPointerException.class, () -> {
@@ -102,12 +135,26 @@ public class DoubleLinkedListTest {
         }
 
         @Test
-        @DisplayName("Borrar ultimo nodo")
+        @DisplayName("Borrar ultimo nodo lista unitaria")
         void borrarUltimoNodo(){
             linkedList.deleteLast();
             assertThrows(NullPointerException.class, () -> {
                 linkedList.first();
             });
+        }
+
+        @Test
+        @DisplayName("Ordenar no produce cambios")
+        void sort_WithoutChanges(){
+            Integer first = linkedList.first();
+            Integer last = linkedList.last();
+
+            linkedList.sort(Comparator.reverseOrder());
+
+            assertAll(
+                    () -> assertEquals(first, linkedList.first()),
+                    () -> assertEquals(last, linkedList.last())
+            );
         }
     }
 
@@ -164,7 +211,7 @@ public class DoubleLinkedListTest {
         }
 
         @Test
-        @DisplayName("Obtener primer nodo de la lista")
+        @DisplayName("Obtener primer nodo lista no vacia")
         void obtenerPrimerNodo(){
             Integer first = linkedList.first();
 
@@ -172,7 +219,7 @@ public class DoubleLinkedListTest {
         }
 
         @Test
-        @DisplayName("Obtener ultimo nodo de la lista")
+        @DisplayName("Obtener ultimo nodo lista no vacia")
         void obtenerUltimoNodo(){
             Integer last = linkedList.last();
 
@@ -180,13 +227,117 @@ public class DoubleLinkedListTest {
         }
 
         @Test
-        @DisplayName("Obtener tamanyo de la lista")
+        @DisplayName("Obtener tamanyo lista no vacia")
         void obtenerTamanyo(){
             int tamanyo = linkedList.size();
 
             assertEquals(3, tamanyo);
         }
+
+        @Test
+        @DisplayName("Obtener elemento lista no vacia correcto")
+        void get_ReturnAElement(){
+            Integer element = linkedList.get(1);
+
+            Integer elementoEsperado = 1;
+
+            assertEquals(elementoEsperado, element);
+        }
+
+        @Test
+        @DisplayName("Obtener elemento lista no vacia indice negativo lanza excepcion")
+        void get_IndexNegative_ThrowException(){
+            assertThrows(DoubleLinkedQueueException.class, () -> {
+               linkedList.get(-3);
+            });
+        }
+
+        @Test
+        @DisplayName("Obtener elemento lista no vacia indice mayor que tamanyo lanza excepcion")
+        void get_IndexGreaterOrEqualThanSize_ThrowException(){
+            assertThrows(DoubleLinkedQueueException.class, () -> {
+                linkedList.get(5);
+            });
+        }
+
+        @Test
+        @DisplayName("Contiene lista no vacia con elemento contenido devuelve true")
+        void contains_ReturnTrue(){
+            Integer element = 2;
+
+            assertTrue(linkedList.contains(element));
+        }
+
+        @Test
+        @DisplayName("Contiene lista no vacia con elemento no contenido devuelve false")
+        void contais_ReturnFalse(){
+            Integer element = 7;
+
+            assertFalse(linkedList.contains(element));
+        }
+
+        @Test
+        @DisplayName("Borrar en lista no vacia correcto")
+        void remove_Correct(){
+            Integer element = 1;
+
+            linkedList.remove(element);
+
+            assertFalse(linkedList.contains(element));
+            assertNotEquals(3, linkedList.size());
+        }
+
+        @Test
+        @DisplayName("Borrar primer elemento lista no vacia correcto")
+        void remove_FirstElement_Correct(){
+            Integer element = 0;
+
+            linkedList.remove(0);
+
+            assertFalse(linkedList.contains(element));
+            assertNotEquals(3, linkedList.size());
+        }
+
+        @Test
+        @DisplayName("Borrar ultimo elemento lista no vacia correcto")
+        void remove_LastElement_Correct(){
+            Integer element = linkedList.size()-1;
+
+            linkedList.remove(element);
+
+            assertFalse(linkedList.contains(element));
+            assertNotEquals(3, linkedList.size());
+        }
+
+        @Test
+        @DisplayName("Borrar elemento inexistente lista no vacia lanza excepcion")
+        void remove_NonExistentElement_ThrowException(){
+            Integer element = 7;
+
+            assertThrows(DoubleLinkedQueueException.class, () ->{
+                linkedList.remove(element);
+            });
+        }
+
+        @Test
+        @DisplayName("Ordenar lista no vacia correcto")
+        void sort_Correct(){
+            linkedList.sort(Comparator.reverseOrder());
+
+            DoubleLinkedList<Integer> orderedList = new DoubleLinkedList<>();
+            orderedList.prepend(0);
+            orderedList.prepend(1);
+            orderedList.prepend(2);
+
+            for(int i = 0; i < linkedList.size(); i++){
+                Integer elExpected = orderedList.get(i);
+                Integer elActual = linkedList.get(i);
+
+                assertEquals(elExpected, elActual);
+            }
+        }
     }
+
 }
 
 

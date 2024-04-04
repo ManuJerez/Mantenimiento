@@ -98,18 +98,18 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
     public int size() {
         return size;
     }
-    /* 
+
     @Override
     public T get(int index) {
-        if(index < 0)
-            throw new DoubleLinkedQueueException("No hay indice negativo");
+        if(index < 0 || index >= size)
+            throw new DoubleLinkedQueueException("Indice fuera de rango");
         else {
             int i = 0;
             LinkedNode<T> node = first;
 
             while (i < index) {
                 node = node.getNext();
-                index++;
+                i++;
             }
 
             return node.getItem();
@@ -142,12 +142,15 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
             if (node.isFirstNode()) {
                 node.getNext().setPrevious(null);
                 first = node.getNext();
+                size--;
             } else if (node.isLastNode()) {
                 prev.setNext(null);
                 last = prev;
+                size--;
             } else {
                 node.getNext().setPrevious(prev);
                 prev.setNext(node.getNext());
+                size--;
             }
         }
     }
@@ -174,5 +177,4 @@ public class DoubleLinkedList<T> implements DoubleLinkedQueue<T> {
             node = node.getNext();
         }
     }
-    */
 }

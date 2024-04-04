@@ -72,7 +72,7 @@ public interface DoubleLinkedQueue<T> {
      * @throws IndexOutOfBoundsException if the index is out of range
      */
 
-    //T get(int index);
+    T get(int index);
 
     /**
      * Returns {@code true} if this deque contains the specified element.
@@ -83,14 +83,14 @@ public interface DoubleLinkedQueue<T> {
      * @param value whose presence in this deque is to be tested
      * @return {@code true} if this deque contains the specified element
      */
-    //boolean contains(T value);
+    boolean contains(T value);
 
     /**
      * Removes the first occurrence of the specified element from this deque, if it is present.
      *
      * @param value to be removed from this deque, if present
      */
-    //void remove(T value);
+    void remove(T value);
 
     /**
      * Sorts this deque according to the order induced by the specified {@code Comparator}.
@@ -101,6 +101,6 @@ public interface DoubleLinkedQueue<T> {
      *
      * @param comparator the {@code Comparator} used to compare deque elements
      */
-    //void sort(Comparator<? super T> comparator);
+    void sort(Comparator<? super T> comparator);
     
 }
