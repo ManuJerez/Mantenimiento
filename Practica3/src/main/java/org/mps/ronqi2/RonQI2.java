@@ -49,5 +49,5 @@ public abstract class RonQI2 {
     */
     public boolean estaConectado(){
         return disp.estaConectado();
-    }    
+    }
 }

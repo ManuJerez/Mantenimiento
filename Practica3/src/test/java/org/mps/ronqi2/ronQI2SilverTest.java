@@ -5,14 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mps.dispositivo.Dispositivo;
-import org.mps.dispositivo.DispositivoSilver;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class ronQI2Silvertest {
+public class ronQI2SilverTest {
 
     Dispositivo dispositivoMock;
     RonQI2Silver ronQI2Silver;
@@ -42,6 +43,7 @@ public class ronQI2Silvertest {
 
             ronQI2Silver.anyadirDispositivo(dispositivoMock);
             boolean res = ronQI2Silver.inicializar();
+
             assertTrue(res);
         }
 
@@ -55,6 +57,7 @@ public class ronQI2Silvertest {
 
             ronQI2Silver.anyadirDispositivo(dispositivoMock);
             boolean res = ronQI2Silver.inicializar();
+
             assertFalse(res);
         }
 
@@ -68,6 +71,35 @@ public class ronQI2Silvertest {
 
             ronQI2Silver.anyadirDispositivo(dispositivoMock);
             boolean res = ronQI2Silver.inicializar();
+
+            assertFalse(res);
+        }
+
+        @Test
+        @DisplayName("Inicializar con sensor presion desconfigurado devuelve false")
+        public void inicializar_WhenPressureSensorMisconfigured_ReturnFalse(){
+            when(dispositivoMock.conectarSensorPresion()).thenReturn(true);
+            when(dispositivoMock.conectarSensorSonido()).thenReturn(true);
+            when(dispositivoMock.configurarSensorPresion()).thenReturn(false);
+            when(dispositivoMock.configurarSensorSonido()).thenReturn(true);
+
+            ronQI2Silver.anyadirDispositivo(dispositivoMock);
+            boolean res = ronQI2Silver.inicializar();
+
+            assertFalse(res);
+        }
+
+        @Test
+        @DisplayName("Inicializar con sensor sonido desconfigurado devuelve false")
+        public void inicializar_WhenSoundSensorMisconfigured_ReturnFalse(){
+            when(dispositivoMock.conectarSensorPresion()).thenReturn(true);
+            when(dispositivoMock.conectarSensorSonido()).thenReturn(true);
+            when(dispositivoMock.configurarSensorPresion()).thenReturn(true);
+            when(dispositivoMock.configurarSensorSonido()).thenReturn(false);
+
+            ronQI2Silver.anyadirDispositivo(dispositivoMock);
+            boolean res = ronQI2Silver.inicializar();
+
             assertFalse(res);
         }
 
@@ -76,7 +108,7 @@ public class ronQI2Silvertest {
          * se llama una sola vez al configurar de cada sensor.
          */
         @Test
-        @DisplayName("Inicializar correctamente (estaConectadoTrue) llama solo una vez a configurar de cada sensor")
+        @DisplayName("Inicializar correctamente (estaConectado devuelve true) llama solo una vez a configurar de cada sensor")
         public void inicializar_WhenConectarIsTrue_OnlyOneTimeConfigureEachSensor(){
             when(dispositivoMock.conectarSensorPresion()).thenReturn(true);
             when(dispositivoMock.conectarSensorSonido()).thenReturn(true);
@@ -86,10 +118,12 @@ public class ronQI2Silvertest {
 
             ronQI2Silver.anyadirDispositivo(dispositivoMock);
             boolean res = ronQI2Silver.inicializar();
-            assertTrue(res);
-            assertTrue(dispositivoMock.estaConectado());
+            boolean estaConectado = ronQI2Silver.estaConectado();
 
-            verify(dispositivoMock).conectarSensorPresion();
+            assertTrue(res);
+            assertTrue(estaConectado);
+
+            verify(dispositivoMock).configurarSensorPresion();
             verify(dispositivoMock).configurarSensorSonido();
         }
     }
@@ -99,15 +133,37 @@ public class ronQI2Silvertest {
      * Genera las pruebas que estimes oportunas para comprobar su correcto funcionamiento. 
      * Centrate en probar si todo va bien, o si no, y si se llama a los métodos que deben ser llamados.
      */
-    
-    /*
-     * El método evaluarApneaSuenyo, evalua las últimas 5 lecturas realizadas con obtenerNuevaLectura(), 
-     * y si ambos sensores superan o son iguales a sus umbrales, que son thresholdP = 20.0f y thresholdS = 30.0f;, 
-     * se considera que hay una apnea en proceso. Si hay menos de 5 lecturas también debería realizar la media.
-     * /
-     
-     /* Realiza un primer test para ver que funciona bien independientemente del número de lecturas.
-     * Usa el ParameterizedTest para realizar un número de lecturas previas a calcular si hay apnea o no (por ejemplo 4, 5 y 10 lecturas).
-     * https://junit.org/junit5/docs/current/user-guide/index.html#writing-tests-parameterized-tests
-     */
+
+
+    @Nested
+    @DisplayName("Evaluar apnea suenyo")
+    class EvaluarApneaSuenyo {
+        /*
+         * El método evaluarApneaSuenyo, evalua las últimas 5 lecturas realizadas con obtenerNuevaLectura(),
+         * y si ambos sensores superan o son iguales a sus umbrales, que son thresholdP = 20.0f y thresholdS = 30.0f;,
+         * se considera que hay una apnea en proceso. Si hay menos de 5 lecturas también debería realizar la media.
+         */
+
+
+        /* Realiza un primer test para ver que funciona bien independientemente del número de lecturas.
+         * Usa el ParameterizedTest para realizar un número de lecturas previas a calcular si hay apnea o no (por ejemplo 4, 5 y 10 lecturas).
+         * https://junit.org/junit5/docs/current/user-guide/index.html#writing-tests-parameterized-tests
+         */
+        @ParameterizedTest
+        @ValueSource(ints = {2, 4, 5, 10})
+        @DisplayName("Evaluar apnea con diferente numero de lecturas")
+        public void evaluateApnea_WithDiffNumOfReadings(int readings){
+            when(dispositivoMock.leerSensorPresion()).thenReturn(20.0f);
+            when(dispositivoMock.leerSensorSonido()).thenReturn(30.0f);
+
+            ronQI2Silver.anyadirDispositivo(dispositivoMock);
+
+            for(int i = 0; i < readings; i++){
+                ronQI2Silver.obtenerNuevaLectura();
+            }
+            boolean res = ronQI2Silver.evaluarApneaSuenyo();
+
+            assertTrue(res);
+        }
+    }
 }
