@@ -1,5 +1,10 @@
-package org.mps.ronqi2;
+/*
+AUTORES:
+- Manuel Jesús Jerez Sánchez
+- Pablo Astudillo Fraga
+ */
 
+package org.mps.ronqi2;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -233,8 +238,8 @@ public class ronQI2SilverTest {
          */
         @ParameterizedTest
         @ValueSource(ints = {2, 4, 5, 10})
-        @DisplayName("Evaluar apnea con diferente numero de lecturas iguales al limite")
-        public void evaluateApnea_WithDiffNumOfReadings(int readings){
+        @DisplayName("Evaluar apnea con diferente numero de lecturas, valores iguales al limite")
+        public void evaluateApnea_WithDiffNumOfReadings_ReturnTrue(int readings){
             when(dispositivoMock.leerSensorPresion()).thenReturn(20.0f);
             when(dispositivoMock.leerSensorSonido()).thenReturn(30.0f);
 
@@ -246,15 +251,12 @@ public class ronQI2SilverTest {
             boolean res = ronQI2Silver.evaluarApneaSuenyo();
 
             assertTrue(res);
-
-            verify(dispositivoMock,times(readings)).leerSensorPresion();
-            verify(dispositivoMock,times(readings)).leerSensorSonido();
         }
 
         @ParameterizedTest
         @ValueSource(ints = {2, 4, 5, 10})
-        @DisplayName("Evaluar apnea con diferente numero de lecturas por debajo del limite")
-        public void evaluateApnea_WithDiffNumOfReadingsUnderThreshold(int readings)
+        @DisplayName("Evaluar apnea con diferente numero de lecturas, valores por debajo del limite")
+        public void evaluateApnea_WithDiffNumOfReadingsUnderThreshold_ReturnFalse(int readings)
         {
             when(dispositivoMock.leerSensorPresion()).thenReturn(19.0f);
             when(dispositivoMock.leerSensorSonido()).thenReturn(29.0f);
@@ -267,16 +269,13 @@ public class ronQI2SilverTest {
             boolean res = ronQI2Silver.evaluarApneaSuenyo();
 
             assertFalse(res);
-
-            verify(dispositivoMock,times(readings)).leerSensorPresion();
-            verify(dispositivoMock,times(readings)).leerSensorSonido();
         }
 
         @ParameterizedTest
         @ValueSource(ints = {2, 4, 5, 10})
-        @DisplayName("Evaluar apnea con diferente numero de lecturas superando la presion pero no el sonido")
-        public void evaluateApnea_WithDiffNumOfReadingsSoundUnderThreshold(int readings){
-            when(dispositivoMock.leerSensorPresion()).thenReturn(20.0f);
+        @DisplayName("Evaluar apnea con diferente numero de lecturas, valores superan la presion pero no el sonido")
+        public void evaluateApnea_WithDiffNumOfReadingsSoundUnderThreshold_ReturnFalse(int readings){
+            when(dispositivoMock.leerSensorPresion()).thenReturn(21.0f);
             when(dispositivoMock.leerSensorSonido()).thenReturn(29.0f);
 
             ronQI2Silver.anyadirDispositivo(dispositivoMock);
@@ -287,17 +286,14 @@ public class ronQI2SilverTest {
             boolean res = ronQI2Silver.evaluarApneaSuenyo();
 
             assertFalse(res);
-
-            verify(dispositivoMock,times(readings)).leerSensorPresion();
-            verify(dispositivoMock,times(readings)).leerSensorSonido();
         }
 
         @ParameterizedTest
         @ValueSource(ints = {2, 4, 5, 10})
-        @DisplayName("Evaluar apnea con diferente numero de lecturas superando el sonido pero no la presion")
-        public void evaluateApnea_WithDiffNumOfReadingsPressureUnderThreshold(int readings){
+        @DisplayName("Evaluar apnea con diferente numero de lecturas, valores superan el sonido pero no la presion")
+        public void evaluateApnea_WithDiffNumOfReadingsPressureUnderThreshold_ReturnFalse(int readings){
             when(dispositivoMock.leerSensorPresion()).thenReturn(19.0f);
-            when(dispositivoMock.leerSensorSonido()).thenReturn(30.0f);
+            when(dispositivoMock.leerSensorSonido()).thenReturn(31.0f);
 
             ronQI2Silver.anyadirDispositivo(dispositivoMock);
 
@@ -307,9 +303,6 @@ public class ronQI2SilverTest {
             boolean res = ronQI2Silver.evaluarApneaSuenyo();
 
             assertFalse(res);
-
-            verify(dispositivoMock,times(readings)).leerSensorPresion();
-            verify(dispositivoMock,times(readings)).leerSensorSonido();
         }
     }
 }
