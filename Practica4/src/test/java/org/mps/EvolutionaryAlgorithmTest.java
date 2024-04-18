@@ -1,9 +1,6 @@
 package org.mps;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mps.crossover.CrossoverOperator;
 import org.mps.crossover.OnePointCrossover;
 import org.mps.mutation.SwapMutation;
@@ -17,15 +14,48 @@ public class EvolutionaryAlgorithmTest {
     private SwapMutation swapMutation;
     private OnePointCrossover onePointCrossover;
     EvolutionaryAlgorithm evolutionaryAlgorithm;
-    int [][] population;
+    int[][] population;
 
     @BeforeEach()
     void setup() throws EvolutionaryAlgorithmException {
-        tournamentSelection = new TournamentSelection(10);
+        tournamentSelection = new TournamentSelection(5);
         swapMutation = new SwapMutation();
         onePointCrossover = new OnePointCrossover();
 
         evolutionaryAlgorithm = new EvolutionaryAlgorithm(tournamentSelection, swapMutation, onePointCrossover);
+    }
+
+    @Nested
+    @DisplayName("Constructores")
+    class construct{
+        @Test
+        @DisplayName("Constructor EvolutionaryAlgorithm con operador de seleccion nulo lanza excepcion")
+        void evolutionaryAlgorithmConstruct_WithNullSelectionOperator_ThrowException(){
+            assertThrows(EvolutionaryAlgorithmException.class, () -> {
+                new EvolutionaryAlgorithm(null, swapMutation, onePointCrossover);
+            });
+        }
+        @Test
+        @DisplayName("Constructor EvolutionaryAlgorithm con operador de mutacion nulo lanza excepcion")
+        void evolutionaryAlgorithmConstruct_WithNullMutationOperator_ThrowException(){
+            assertThrows(EvolutionaryAlgorithmException.class, () -> {
+                new EvolutionaryAlgorithm(tournamentSelection, null, onePointCrossover);
+            });
+        }
+        @Test
+        @DisplayName("Constructor EvolutionaryAlgorithm con operador de cruce nulo lanza excepcion")
+        void evolutionaryAlgorithmConstruct_WithNullCrossoverOperator_ThrowException(){
+            assertThrows(EvolutionaryAlgorithmException.class, () -> {
+                new EvolutionaryAlgorithm(tournamentSelection, swapMutation, null);
+            });
+        }
+        @Test
+        @DisplayName("Constructor TournamentSelection con tamanyo menor o igual a cero lanza excepcion")
+        void tournamentSelectionConstruct_WithSizeZero_ThrowException(){
+            assertThrows(EvolutionaryAlgorithmException.class, () -> {
+                new TournamentSelection(0);
+            });
+        }
     }
 
     @Nested
@@ -49,6 +79,7 @@ public class EvolutionaryAlgorithmTest {
 
             assertNotNull(optimizedPopulation);
             assertEquals(optimizedPopulation.length, population.length);
+
         }
 
         @Test
