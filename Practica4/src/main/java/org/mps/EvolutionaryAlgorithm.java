@@ -59,7 +59,10 @@ public class EvolutionaryAlgorithm {
             int[][] offspringPopulation = new int[population.length][population.length];
 
             // Aplicamos operadores de selección y cruce para generar descendientes
-            for (int i = 0; i < population.length; i += 2) {
+            // ERROR: Si se intenta acceder al indice i+1 del array population y el tamanyo de este es impar se
+            // producirá una IndexOutOfBoundsException, por tanto el bucle debería actuar hasta el valor population.length-1
+            //for (int i = 0; i < population.length; i += 2) {
+            for(int i = 0; i < population.length-1; i += 2){
                 // Seleccionamos dos individuos de la población actual
                 int[] parent1 = selectionOperator.select(population[i]);
                 int[] parent2 = selectionOperator.select(population[i + 1]);
@@ -89,7 +92,7 @@ public class EvolutionaryAlgorithm {
 
     /*
      * Método que calcula que población tiene mejor calidad o fitness, que en este
-     * caso se ha establecio
+     * caso se ha establecido
      * como el que tiene menor suma de sus elementos
      */
     private boolean better(int[] population1, int[] population2) {
