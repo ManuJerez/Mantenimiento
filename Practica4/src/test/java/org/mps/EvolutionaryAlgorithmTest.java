@@ -86,9 +86,7 @@ public class EvolutionaryAlgorithmTest {
         @Test
         @DisplayName("Operador de cruce devuelve nuevas soluciones distintas")
         void crossoverOperator_CorrectPopulation_ReturnNewSolution() throws EvolutionaryAlgorithmException {
-            CrossoverOperator crossoverOperator = evolutionaryAlgorithm.getCrossoverOperator();
-
-            int[][] crossoveredPopulation = crossoverOperator.crossover(population[0], population[1]);
+            int[][] crossoveredPopulation = onePointCrossover.crossover(population[0], population[1]);
             boolean sameSolutions = true;
 
             for(int i = 0; i < 2; i++){
@@ -106,51 +104,44 @@ public class EvolutionaryAlgorithmTest {
         @Test
         @DisplayName("Operador de cruce con padre 1 nulo lanza excepcion")
         void crossoverOperator_NullParent1_ThrowException(){
-            CrossoverOperator crossoverOperator = evolutionaryAlgorithm.getCrossoverOperator();
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
-                crossoverOperator.crossover(null, population[1]);
+                onePointCrossover.crossover(null, population[1]);
             });
         }
 
         @Test
         @DisplayName("Operador de cruce con padre 2 nulo lanza excepcion")
         void crossoverOperator_NullParent2_ThrowException(){
-            CrossoverOperator crossoverOperator = evolutionaryAlgorithm.getCrossoverOperator();
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
-                crossoverOperator.crossover(population[0], null);
+                onePointCrossover.crossover(population[0], null);
             });
         }
 
         @Test
         @DisplayName("Operador de cruce con padres de diferente tamanyo lanza excepcion")
         void crossoverOperator_DiffSizeParents_ThrowException(){
-            CrossoverOperator crossoverOperator = evolutionaryAlgorithm.getCrossoverOperator();
             int[] parent1 = new int[5];
             int[] parent2 = new int[4];
 
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
-                crossoverOperator.crossover(parent1, parent2);
+                onePointCrossover.crossover(parent1, parent2);
             });
         }
 
         @Test
-        @DisplayName("Select with correct data")
+        @DisplayName("Seleccion devuelve soluciones mismo tamanyo")
         void selectCorrectData() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = {4,5,6,7,8,9,10,11};
+            int[] selected = tournamentSelection.select(population[0]);
 
-            int[] selected = tournamentSelection.select(newPopulation);
-
-            assertTrue(selected != null && newPopulation.length == selected.length);
+            assertTrue(selected != null && population[0].length == selected.length);
         }
 
         @Test
-        @DisplayName("Mutate with correct data")
+        @DisplayName("Mutacion devuelve soluciones mismo tamanyo")
         void mutateCorrectData() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = {4,5,6,7,8,9,10,11};
+            int[] mutated = swapMutation.mutate(population[0]);
 
-            int[] mutated = swapMutation.mutate(newPopulation);
-
-            assertTrue(mutated != null && newPopulation.length == mutated.length);
+            assertTrue(mutated != null && population[0].length == mutated.length);
         }
 
     }
@@ -176,24 +167,20 @@ public class EvolutionaryAlgorithmTest {
         }
 
         @Test
-        @DisplayName("Select with null population")
-        void selectNullPopulation() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = null;
-
+        @DisplayName("Seleccion lanza excepcion")
+        void selectNullPopulation() {
             assertThrows(EvolutionaryAlgorithmException.class, () ->
             {
-                int[] selected = tournamentSelection.select(newPopulation);
+                tournamentSelection.select(null);
             });
         }
 
         @Test
-        @DisplayName("Select with null population")
-        void mutationNullPopulation() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = null;
-
+        @DisplayName("Mutacion lanza excepcion")
+        void mutationNullPopulation() {
             assertThrows(EvolutionaryAlgorithmException.class, () ->
             {
-                int[] selected = swapMutation.mutate(newPopulation);
+                swapMutation.mutate(null);
             });
         }
     }
@@ -210,7 +197,7 @@ public class EvolutionaryAlgorithmTest {
         }
 
         @Test
-        @DisplayName("Optimizar lanza excepcion")
+        @DisplayName("Optimizar poblacion soluciones vacias lanza excepcion")
         void optmize_EmptyPopulation_ThrowException(){
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
                 evolutionaryAlgorithm.optimize(population);
@@ -228,31 +215,26 @@ public class EvolutionaryAlgorithmTest {
         @Test
         @DisplayName("Operador de cruce lanza excepcion")
         void crossoverOperator_EmptyPopulation_ThrowException(){
-            CrossoverOperator crossoverOperator = evolutionaryAlgorithm.getCrossoverOperator();
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
-                crossoverOperator.crossover(population[0], population[1]);
+                onePointCrossover.crossover(population[0], population[1]);
             });
         }
 
         @Test
-        @DisplayName("Select with empty population")
-        void selectEmptyPopulation() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = {};
-
+        @DisplayName("Seleccion lanza excepcion")
+        void selectEmptyPopulation() {
             assertThrows(EvolutionaryAlgorithmException.class, () ->
             {
-                int[] selected = tournamentSelection.select(newPopulation);
+                tournamentSelection.select(population[0]);
             });
         }
 
         @Test
-        @DisplayName("Mutate with empty population")
-        void mutateEmptyPopulation() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = {};
-
+        @DisplayName("Mutacion lanza excepcion")
+        void mutateEmptyPopulation() {
             assertThrows(EvolutionaryAlgorithmException.class, () ->
             {
-                int[] selected = swapMutation.mutate(newPopulation);
+                swapMutation.mutate(population[0]);
             });
         }
 
@@ -326,8 +308,8 @@ public class EvolutionaryAlgorithmTest {
             }
 
             @Test
-            @DisplayName("Set Selecion Operator with negative value")
-            void setSelectionOperatorNegative() throws EvolutionaryAlgorithmException {
+            @DisplayName("Set Selecion Operator con valor negativo lanza excepcion")
+            void setSelectionOperatorNegative() {
                 assertThrows(EvolutionaryAlgorithmException.class, () ->{
                     SelectionOperator selectionOperatorAux = new TournamentSelection(-5);
 
@@ -336,7 +318,7 @@ public class EvolutionaryAlgorithmTest {
             }
 
             @Test
-            @DisplayName("Set Selection Operator")
+            @DisplayName("Set Crossover Operator")
             void setCrossoverOperator() {
                 CrossoverOperator crossoverOperatorAux = new OnePointCrossover();
 
