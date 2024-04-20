@@ -133,6 +133,26 @@ public class EvolutionaryAlgorithmTest {
             });
         }
 
+        @Test
+        @DisplayName("Select with correct data")
+        void selectCorrectData() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = {4,5,6,7,8,9,10,11};
+
+            int[] selected = tournamentSelection.select(newPopulation);
+
+            assertTrue(selected != null && newPopulation.length == selected.length);
+        }
+
+        @Test
+        @DisplayName("Mutate with correct data")
+        void mutateCorrectData() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = {4,5,6,7,8,9,10,11};
+
+            int[] mutated = swapMutation.mutate(newPopulation);
+
+            assertTrue(mutated != null && newPopulation.length == mutated.length);
+        }
+
     }
     @Nested
     @DisplayName("Con poblacion nula")
@@ -152,6 +172,28 @@ public class EvolutionaryAlgorithmTest {
             population[0] = null;
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
                 evolutionaryAlgorithm.optimize(population);
+            });
+        }
+
+        @Test
+        @DisplayName("Select with null population")
+        void selectNullPopulation() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = null;
+
+            assertThrows(EvolutionaryAlgorithmException.class, () ->
+            {
+                int[] selected = tournamentSelection.select(newPopulation);
+            });
+        }
+
+        @Test
+        @DisplayName("Select with null population")
+        void mutationNullPopulation() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = null;
+
+            assertThrows(EvolutionaryAlgorithmException.class, () ->
+            {
+                int[] selected = swapMutation.mutate(newPopulation);
             });
         }
     }
@@ -191,6 +233,29 @@ public class EvolutionaryAlgorithmTest {
                 crossoverOperator.crossover(population[0], population[1]);
             });
         }
+
+        @Test
+        @DisplayName("Select with empty population")
+        void selectEmptyPopulation() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = {};
+
+            assertThrows(EvolutionaryAlgorithmException.class, () ->
+            {
+                int[] selected = tournamentSelection.select(newPopulation);
+            });
+        }
+
+        @Test
+        @DisplayName("Mutate with empty population")
+        void mutateEmptyPopulation() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = {};
+
+            assertThrows(EvolutionaryAlgorithmException.class, () ->
+            {
+                int[] selected = swapMutation.mutate(newPopulation);
+            });
+        }
+
     }
 
     @Nested
@@ -281,43 +346,6 @@ public class EvolutionaryAlgorithmTest {
 
                 assertTrue(newCrossover == crossoverOperatorAux && newCrossover != onePointCrossover);
             }
-        }
-    }
-
-    @Nested
-    @DisplayName("Tournament Selection Tests")
-    class tournamentSelectionTests
-    {
-        @Test
-        @DisplayName("Select with correct data")
-        void selectCorrectData() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = {4,5,6,7,8,9,10,11};
-
-            int[] selected = tournamentSelection.select(newPopulation);
-            
-            assertTrue(selected != null && newPopulation.length == selected.length);
-        }
-
-        @Test
-        @DisplayName("Select with null population")
-        void selectNullPopulation() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = null;
-
-            assertThrows(EvolutionaryAlgorithmException.class, () ->
-            {
-                int[] selected = tournamentSelection.select(newPopulation);
-            });
-        }
-
-        @Test
-        @DisplayName("Select with empty population")
-        void selectEmptyPopulation() throws EvolutionaryAlgorithmException {
-            int[] newPopulation = {};
-
-            assertThrows(EvolutionaryAlgorithmException.class, () ->
-            {
-                int[] selected = tournamentSelection.select(newPopulation);
-            });
         }
     }
 }
