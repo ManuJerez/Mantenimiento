@@ -1,3 +1,9 @@
+/*
+AUTORES:
+- MANUEL JESÚS JEREZ SÁNCHEZ
+- PABLO ASTUDILLO FRAGA
+ */
+
 package org.mps;
 
 import org.junit.jupiter.api.*;
@@ -29,7 +35,7 @@ public class EvolutionaryAlgorithmTest {
 
     @Nested
     @DisplayName("Constructores")
-    class construct{
+    class constructs{
         @Test
         @DisplayName("Constructor EvolutionaryAlgorithm con operador de seleccion nulo lanza excepcion")
         void evolutionaryAlgorithmConstruct_WithNullSelectionOperator_ThrowException(){
@@ -81,6 +87,9 @@ public class EvolutionaryAlgorithmTest {
 
             assertNotNull(optimizedPopulation);
             assertEquals(optimizedPopulation.length, population.length);
+            for(int i = 0; i < population.length; i++){
+                assertEquals(optimizedPopulation[i].length, population[i].length);
+            }
         }
 
         @Test
