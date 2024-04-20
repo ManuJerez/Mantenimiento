@@ -283,6 +283,44 @@ public class EvolutionaryAlgorithmTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("Tournament Selection Tests")
+    class tournamentSelectionTests
+    {
+        @Test
+        @DisplayName("Select with correct data")
+        void selectCorrectData() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = {4,5,6,7,8,9,10,11};
+
+            int[] selected = tournamentSelection.select(newPopulation);
+
+            assertNotNull(selected);
+            assertEquals(newPopulation.length, selected.length);
+        }
+
+        @Test
+        @DisplayName("Select with null population")
+        void selectNullPopulation() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = null;
+
+            assertThrows(EvolutionaryAlgorithmException.class, () ->
+            {
+                int[] selected = tournamentSelection.select(newPopulation);
+            });
+        }
+
+        @Test
+        @DisplayName("Select with empty population")
+        void selectEmptyPopulation() throws EvolutionaryAlgorithmException {
+            int[] newPopulation = {};
+
+            assertThrows(EvolutionaryAlgorithmException.class, () ->
+            {
+                int[] selected = tournamentSelection.select(newPopulation);
+            });
+        }
+    }
 }
 
 
