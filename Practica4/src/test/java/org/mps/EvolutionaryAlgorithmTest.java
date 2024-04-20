@@ -294,9 +294,8 @@ public class EvolutionaryAlgorithmTest {
             int[] newPopulation = {4,5,6,7,8,9,10,11};
 
             int[] selected = tournamentSelection.select(newPopulation);
-
-            assertNotNull(selected);
-            assertEquals(newPopulation.length, selected.length);
+            
+            assertTrue(selected != null && newPopulation.length == selected.length);
         }
 
         @Test
