@@ -3,7 +3,9 @@ package org.mps;
 import org.junit.jupiter.api.*;
 import org.mps.crossover.CrossoverOperator;
 import org.mps.crossover.OnePointCrossover;
+import org.mps.mutation.MutationOperator;
 import org.mps.mutation.SwapMutation;
+import org.mps.selection.SelectionOperator;
 import org.mps.selection.TournamentSelection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -188,6 +190,97 @@ public class EvolutionaryAlgorithmTest {
             assertThrows(EvolutionaryAlgorithmException.class, () -> {
                 crossoverOperator.crossover(population[0], population[1]);
             });
+        }
+    }
+
+    @Nested
+    @DisplayName("Getters y Setters")
+    class gettersSetters
+    {
+        @Nested
+        @DisplayName("Getters")
+        class getters
+        {
+            @Test
+            @DisplayName("Get Mutation Operator")
+            void getMutationOperator()
+            {
+                MutationOperator mo;
+                mo = evolutionaryAlgorithm.getMutationOperator();
+
+                assertEquals(swapMutation,mo);
+            }
+
+            @Test
+            @DisplayName("Get Selection Operator")
+            void getSelectionOperator()
+            {
+                SelectionOperator selectionOperator;
+                selectionOperator = evolutionaryAlgorithm.getSelectionOperator();
+
+                assertEquals(tournamentSelection,selectionOperator);
+            }
+
+            @Test
+            @DisplayName("Get Crossover Operator")
+            void getCrossoverOperator()
+            {
+                CrossoverOperator crossoverOperator;
+                crossoverOperator = evolutionaryAlgorithm.getCrossoverOperator();
+
+                assertEquals(onePointCrossover,crossoverOperator);
+            }
+        }
+
+        @Nested
+        @DisplayName("Setters")
+        class setters
+        {
+            @Test
+            @DisplayName("Set Mutation Operator")
+            void setMutationOperator() {
+                MutationOperator swapMutationAux = new SwapMutation();
+
+                evolutionaryAlgorithm.setMutationOperator(swapMutationAux);
+
+                MutationOperator newSwap = evolutionaryAlgorithm.getMutationOperator();
+
+                assertTrue(swapMutationAux == newSwap && newSwap != swapMutation);
+            }
+
+            @Test
+            @DisplayName("Set Selection Operator")
+            void setSelectionOperator() throws EvolutionaryAlgorithmException {
+                SelectionOperator selectionOperatorAux = new TournamentSelection(8);
+
+                evolutionaryAlgorithm.setSelectionOperator(selectionOperatorAux);
+
+                SelectionOperator newSelection = evolutionaryAlgorithm.getSelectionOperator();
+
+                assertTrue(newSelection == selectionOperatorAux && newSelection != tournamentSelection);
+            }
+
+            @Test
+            @DisplayName("Set Selecion Operator with negative value")
+            void setSelectionOperatorNegative() throws EvolutionaryAlgorithmException {
+                assertThrows(EvolutionaryAlgorithmException.class, () ->{
+                    SelectionOperator selectionOperatorAux = new TournamentSelection(-5);
+
+                    evolutionaryAlgorithm.setSelectionOperator(selectionOperatorAux);
+                });
+            }
+
+            @Test
+            @DisplayName("Set Selection Operator")
+            void setCrossoverOperator() {
+                CrossoverOperator crossoverOperatorAux = new OnePointCrossover();
+
+                evolutionaryAlgorithm.setCrossoverOperator(crossoverOperatorAux);
+
+                CrossoverOperator newCrossover = evolutionaryAlgorithm.getCrossoverOperator();
+
+                assertTrue(newCrossover == crossoverOperatorAux && newCrossover != onePointCrossover);
+            }
         }
     }
 }
