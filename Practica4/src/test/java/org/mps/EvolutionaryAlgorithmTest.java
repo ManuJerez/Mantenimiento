@@ -26,7 +26,7 @@ public class EvolutionaryAlgorithmTest {
 
     @BeforeEach()
     void setup() throws EvolutionaryAlgorithmException {
-        tournamentSelection = new TournamentSelection(5);
+        tournamentSelection = new TournamentSelection(6);
         swapMutation = new SwapMutation();
         onePointCrossover = new OnePointCrossover();
 
@@ -71,11 +71,10 @@ public class EvolutionaryAlgorithmTest {
     class correctPopulation{
         @BeforeEach()
         void setupCorrectPopulation(){
-            //population = new int[6][6];
-            population = new int[5][5];
+            population = new int[6][6];
             for(int i = 0; i < population.length; i++){
                 for(int j = 0; j < population[0].length; j++){
-                    population[i][j] = (int) (Math.random()*10);
+                    population[i][j] = (int) (Math.random()*1000);
                 }
             }
         }
@@ -90,6 +89,25 @@ public class EvolutionaryAlgorithmTest {
             for(int i = 0; i < population.length; i++){
                 assertEquals(optimizedPopulation[i].length, population[i].length);
             }
+        }
+
+        @Test
+        @DisplayName("Optimizar con poblacion muy mala devuelve poblacion optimizada mismo tamanyo")
+        void optimize_BadPopulation_ReturnOptimizedPopulation() throws EvolutionaryAlgorithmException {
+            int[][] badPopulation = new int[6][6];
+            for(int i = 0; i < badPopulation.length; i++){
+                for(int j = 0; j < badPopulation[0].length; j++){
+                    if(i % 2 != 0){
+                        badPopulation[i][j] = 100;
+                    }else {
+                        badPopulation[i][j] = 0;
+                    }
+                }
+            }
+
+            int[][] optimizedPopulation = evolutionaryAlgorithm.optimize(badPopulation);
+
+            assertEquals(optimizedPopulation.length, badPopulation.length);
         }
 
         @Test
@@ -108,6 +126,15 @@ public class EvolutionaryAlgorithmTest {
             }
 
             assertFalse(sameSolutions);
+        }
+
+        @Test
+        @DisplayName("Optimizar con tamanyo de poblacion impar lanza excepcion")
+        void optimize_PopulationOddSize_ThrowException(){
+            population = new int[5][5];
+            assertThrows(EvolutionaryAlgorithmException.class, () -> {
+                evolutionaryAlgorithm.optimize(population);
+            });
         }
 
         @Test
@@ -143,6 +170,15 @@ public class EvolutionaryAlgorithmTest {
             int[] selected = tournamentSelection.select(population[0]);
 
             assertTrue(selected != null && population[0].length == selected.length);
+        }
+
+        @Test
+        @DisplayName("Seleccion con tamanyo de poblacion distinto de tamanyo torneo lanza excepcion")
+        void selectDiffPopulationAndTournamentSize(){
+            population = new int[6][4];
+            assertThrows(EvolutionaryAlgorithmException.class, () -> {
+                tournamentSelection.select(population[0]);
+            });
         }
 
         @Test
@@ -340,7 +376,6 @@ public class EvolutionaryAlgorithmTest {
         }
     }
 }
-
 
 
 

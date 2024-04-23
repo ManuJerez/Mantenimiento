@@ -59,10 +59,12 @@ public class EvolutionaryAlgorithm {
             int[][] offspringPopulation = new int[population.length][population.length];
 
             // Aplicamos operadores de selección y cruce para generar descendientes
-            // ERROR: Si se intenta acceder al indice i+1 del array population y el tamanyo de este es impar se
-            // producirá una IndexOutOfBoundsException, por tanto el bucle debería actuar hasta el valor population.length-1
-            //for (int i = 0; i < population.length; i += 2) {
-            for(int i = 0; i < population.length-1; i += 2){
+            // ERROR: La longitud de population debe ser par para que no se produzca
+            // un ArrayOutOfBoundsException
+            if(population.length % 2 != 0){
+                throw new EvolutionaryAlgorithmException("La longitud de la poblacion debe ser par");
+            }
+            for (int i = 0; i < population.length; i += 2) {
                 // Seleccionamos dos individuos de la población actual
                 int[] parent1 = selectionOperator.select(population[i]);
                 int[] parent2 = selectionOperator.select(population[i + 1]);
