@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,19 +17,42 @@ public class ArrayBoundedQueueTest {
     class emptyBoundedQueue{
         @BeforeEach
         void setupEmptyQueue(){
-            boundedQueue = new ArrayBoundedQueue(5);
+            boundedQueue = new ArrayBoundedQueue<>(5);
         }
 
         @Test
-        @DisplayName("isEmpty devuelve true")
-        void isEmpty_ReturnTrue(){
-            assertThat(boundedQueue).isEmpty();
+        @DisplayName("Crear cola con capacidad nula lanza excepcion")
+        void create_NullCapacityBoundedQueue_ThrowException(){
+            Throwable createNullCapacityQueue = catchThrowable( () -> {
+                new ArrayBoundedQueue<>(0);
+            });
+            assertThat(createNullCapacityQueue)
+                    .hasMessage("ArrayBoundedException: capacity must be positive");
+        }
+
+        @Test
+        @DisplayName("Put inserta un nuevo elemento en la cola")
+        void put_InsertAnElementInQueue(){
+            boundedQueue.put(4);
+            assertThat(boundedQueue).contains(4);
+        }
+
+        @Test
+        @DisplayName("Get lanza excepcion")
+        void get_ReturnAnElementOfTheQueue(){
+            assertThatThrownBy(boundedQueue::get).hasMessage("get: empty bounded queue");
         }
 
         @Test
         @DisplayName("isFull devuelve false")
         void isFull_ReturnFalse(){
             assertThat(boundedQueue.isFull()).isFalse();
+        }
+
+        @Test
+        @DisplayName("isEmpty devuelve true")
+        void isEmpty_ReturnTrue(){
+            assertThat(boundedQueue).isEmpty();
         }
 
         @Test
@@ -52,12 +74,18 @@ public class ArrayBoundedQueueTest {
         }
 
         @Test
-        @DisplayName("Iterator devuelve iterador vacio")
+        @DisplayName("Iterator devuelve iterador vacio y lanza excepcion")
         void iterator_ReturnEmptyIterator(){
             Iterator iterator = boundedQueue.iterator();
             assertThat(iterator.hasNext()).isFalse();
             assertThatThrownBy(iterator::next).hasMessage("next: bounded queue iterator exhausted");
         }
+
+    }
+
+    @Nested
+    @DisplayName("Con cola llena")
+    class fullBoundedQueue{
 
     }
 }
