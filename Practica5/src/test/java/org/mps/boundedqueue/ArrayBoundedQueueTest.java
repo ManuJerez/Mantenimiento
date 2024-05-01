@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperties;
 
 import java.util.Iterator;
 
@@ -86,6 +87,126 @@ public class ArrayBoundedQueueTest {
     @Nested
     @DisplayName("Con cola llena")
     class fullBoundedQueue{
+        @BeforeEach
+        void setupEmptyQueue(){
+            boundedQueue = new ArrayBoundedQueue<>(5);
+            boundedQueue.put(1);
+            boundedQueue.put(2);
+            boundedQueue.put(3);
+            boundedQueue.put(4);
+            boundedQueue.put(5);
+        }
 
+        @Nested
+        @DisplayName("Put insert an element int the queue")
+        public class put_OnFullQueue
+        {
+            @Test
+            @DisplayName("put insert a null element in a full queue")
+            void put_InsertANullElement_ThrowException()
+            {
+                Throwable insertNullValue = catchThrowable( () -> {
+                    boundedQueue.put(null);
+                });
+                assertThat(insertNullValue)
+                        .hasMessage("put: full bounded queue");
+            }
+
+            @Test
+            @DisplayName("put insert an element in a full queue")
+            void put_InsertAnElement_ThrowException()
+            {
+                Throwable insert = catchThrowable( () -> {
+                    boundedQueue.put(6);
+                });
+                assertThat(insert)
+                        .hasMessage("put: full bounded queue");
+            }
+        }
+
+        @Test
+        @DisplayName("Get return the first element of the queue and delete the element from the queue")
+        void get_ReturnAnElementOfTheQueue()
+        {
+            int element = (int) boundedQueue.get();
+
+            assertThat(element).isEqualTo(1);
+            assertThat(boundedQueue).doesNotContain(element);
+        }
+
+        @Test
+        @DisplayName("isFull return true")
+        void isFull_ReturnTrue()
+        {
+            boolean isFull = boundedQueue.isFull();
+
+            assertThat(isFull).isTrue();
+        }
+
+        @Test
+        @DisplayName("isEmpty return false")
+        void isEmpty_ReturnFalse()
+        {
+            boolean isEmpty = boundedQueue.isEmpty();
+
+            assertThat(isEmpty).isFalse();
+        }
+
+        @Test
+        @DisplayName("size return the value of the queue length that is 5")
+        void size_ReturnQueueLength()
+        {
+            int size = boundedQueue.size();
+
+            assertThat(boundedQueue).size().isEqualTo(size);
+        }
+
+        @Test
+        @DisplayName("getFirst return the index of the first element that is 0")
+        void getFirst_ReturnZero()
+        {
+            int firstElement = boundedQueue.getFirst();
+
+            assertThat(firstElement).isZero();
+        }
+
+        @Test
+        @DisplayName("getLast return the first position available that is 0")
+        void getLast_ReturnFive()
+        {
+            int lastElement = boundedQueue.getLast();
+
+            assertThat(lastElement).isZero();
+        }
+
+        @Nested
+        @DisplayName("Iterator iterate the elements from a queue")
+        public class iterator_OnAFullQueue
+        {
+            Iterator iterator;
+            @BeforeEach
+            void setupIterator()
+            {
+                iterator = boundedQueue.iterator();
+            }
+
+            @Test
+            @DisplayName("hasNext return true")
+            void hasNext_ReturnTrue()
+            {
+                boolean hasNext = iterator.hasNext();
+
+                assertThat(hasNext).isTrue();
+            }
+
+            @Test
+            @DisplayName("next return the next element")
+            void next_ReturnNext()
+            {
+                int next = (int) iterator.next();
+
+                assertThat(boundedQueue).element(boundedQueue.getFirst()).isEqualTo(next);
+            }
+        }
     }
 }

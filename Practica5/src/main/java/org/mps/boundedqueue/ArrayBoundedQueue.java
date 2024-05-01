@@ -33,6 +33,7 @@ public class ArrayBoundedQueue<T> implements BoundedQueue<T> {
      * @param capacity the capacity of the bounded queue
      * @throws IllegalArgumentException if the specified capacity is not positive
      */
+
     @SuppressWarnings("unchecked")
     public ArrayBoundedQueue(int capacity) {
         if (capacity <= 0) {
