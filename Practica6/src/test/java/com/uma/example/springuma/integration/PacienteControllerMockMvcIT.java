@@ -1,5 +1,6 @@
-package com.uma.example.springuma.integration.base;
+package com.uma.example.springuma.integration;
 
+import com.uma.example.springuma.integration.base.AbstractIntegration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.hamcrest.Matchers.hasSize;
 
 
-public class PacienteControllerMockMvcIT extends AbstractIntegration{
+public class PacienteControllerMockMvcIT extends AbstractIntegration {
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,7 +54,7 @@ public class PacienteControllerMockMvcIT extends AbstractIntegration{
     }
 
     @Test
-    @DisplayName("Save a patience and get with index it is correct from PacienteController")
+    @DisplayName("Save a patient and get with index it is correct from PacienteController")
     void savePacienteAndGetWithIndex() throws Exception {
         paciente = new Paciente();
         paciente.setId(1L);
