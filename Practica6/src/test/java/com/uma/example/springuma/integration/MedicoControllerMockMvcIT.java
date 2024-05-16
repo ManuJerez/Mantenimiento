@@ -1,6 +1,11 @@
+/*
+AUTORES:
+- MANUEL JESÚS JEREZ SÁNCHEZ
+- PABLO ASTUDILLO FRAGA
+ */
+
 package com.uma.example.springuma.integration;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -8,12 +13,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.uma.example.springuma.integration.base.AbstractIntegration;
 import com.uma.example.springuma.model.Medico;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import static org.hamcrest.Matchers.containsString;
 
 
 public class MedicoControllerMockMvcIT extends AbstractIntegration {
@@ -36,6 +41,7 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
 
 
     @Test
+    @DisplayName("Create medico should create a doctor correctly")
     void createAndGetMedico_shouldGetMedico() throws Exception {
         Medico medico = new Medico();
         medico.setId(1);
@@ -58,6 +64,7 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
     }
 
     @Test
+    @DisplayName("Update medico should update a data of a doctor with the given id")
     void updateMedico_shouldUpdateMedico() throws Exception {
         medico1.setNombre("Roberto");
 
@@ -73,6 +80,7 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
     }
 
     @Test
+    @DisplayName("Delete medico should delete the doctor with the given id")
     void deleteMedico_shouldDeleteMedico() throws Exception {
         mockMvc.perform(post("/medico")
                 .contentType("application/json")
