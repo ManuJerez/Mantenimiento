@@ -25,7 +25,6 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
 
     private Medico medico1;
 
-    /* 
     @BeforeEach
     void init(){
         medico1 = new Medico();
@@ -34,7 +33,8 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
         medico1.setNombre("Manuel");
         medico1.setEspecialidad("Traumatologia");
     }
-*/
+
+
     @Test
     void createAndGetMedico_shouldGetMedico() throws Exception {
         Medico medico = new Medico();
