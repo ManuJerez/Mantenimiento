@@ -16,7 +16,6 @@ export const options = {
 export default function () {
     const url = "http://localhost:8080/medico/1";
     const res = http.get(url);
-    console.log(res.body);
 
     check(res, {
         'response code was 200': (res) => res.status == 200,
