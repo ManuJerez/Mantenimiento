@@ -112,3 +112,4 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 *.xml
 Practica6/database.mv.db
+Practica6/database.trace.db
