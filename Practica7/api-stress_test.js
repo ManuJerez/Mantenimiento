@@ -1,9 +1,9 @@
 import http from 'k6/http';
-import { sleep, check } from 'k6';
+import { check } from 'k6';
 
 export const options = {
     stages: [
-        { duration: '3m', target: 11550 }, // 100% = 14438 --> 80% - 11550
+        { duration: '3m', target: 11550 },
         { duration: '3m', target: 11550 },
         { duration: '2m', target: 0 },
     ],
@@ -12,8 +12,8 @@ export const options = {
             threshold: 'rate<0.01',
             abortOnFail: true
         }],
-        http_req_duration: ['avg<1000'], 
-    }, 
+        http_req_duration: ['avg<1000'],
+    },
 };
 
 export default function () {
