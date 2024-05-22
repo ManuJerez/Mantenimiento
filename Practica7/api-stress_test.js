@@ -3,15 +3,17 @@ import { sleep, check } from 'k6';
 
 export const options = {
     stages: [
-        { duration: '3m', target: 4329 }, // 100% - 5411 /////// 100% - 7215 --> 80% - 5772
-        { duration: '3m', target: 4329 },
+        { duration: '3m', target: 11550 }, // 100% = 14438 --> 80% - 11550
+        { duration: '3m', target: 11550 },
         { duration: '2m', target: 0 },
     ],
     thresholds: {
-        http_req_failed: ['rate<0.01'], 
+        http_req_failed: [{
+            threshold: 'rate<0.01',
+            abortOnFail: true
+        }],
         http_req_duration: ['avg<1000'], 
-    },
-    abortOnFail: true, 
+    }, 
 };
 
 export default function () {
@@ -21,5 +23,4 @@ export default function () {
     check(res, {
         'status was 200': (r) => r.status == 200,
     });
-    sleep(1);
 }

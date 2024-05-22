@@ -3,13 +3,12 @@ import { sleep, check } from 'k6';
 
 export const options = {
     stages: [
-        { duration: '2m', target: 2886 }, // 100% - 7215
-        { duration: '2m', target: 0 }, 
+        { duration: '1m', target: 5775 }, // 100% - 7215
+        { duration: '1m', target: 0 }, 
     ],
     thresholds: {
         http_req_failed: ['rate<0.005'], 
     },
-    abortOnFail: true, 
 };
 
 export default function () {
