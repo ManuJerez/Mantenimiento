@@ -1,3 +1,9 @@
+/*
+AUTORES:
+- MANUEL JESUS JEREZ SANCHEZ
+- PABLO ASTUDILLO FRAGA
+*/
+
 import http from 'k6/http'
 import { check, sleep } from 'k6';
 
