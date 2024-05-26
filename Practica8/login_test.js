@@ -29,8 +29,8 @@ export default async function () {
         await page.goto('http://localhost:4200');
         sleep(2);
 
-        page.locator('input[name="nombre"]').type('Jose');
-        page.locator('input[name="DNI"]').type('445');
+        page.locator('input[name="nombre"]').type('PABLO');
+        page.locator('input[name="DNI"]').type('111111A');
 
         const loginButton = page.locator('button[name=login]');
 
