@@ -55,7 +55,7 @@ export default async function () {
 
         sleep(3);
         
-        page.locator('textarea[id="mat-input-4"]').type('No tiene cancer');
+        page.locator('textarea[id="mat-input-2"]').fill("No tiene cancer");
         let saveButton = page.locator('button[name=save]');
         await Promise.all([page.waitForNavigation(), saveButton.click()]);
         sleep(3);
