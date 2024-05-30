@@ -42,40 +42,30 @@ export default async function () {
         });
         sleep(3);
 
-        const addButton = page.locator('button[name=add]');
-        sleep(3);
-        await Promise.all([page.waitForNavigation(), addButton.click()]);
-
-        //Comprobar que se ha redirigido a la página de creacion de pacientes
-        check(page, {
-            'creatorPacientes': p => p.locator('mat-card-title').textContent() == 'Añadir un nuevo paciente',
-        });
+        let pacient = page.$$("table tbody tr")[0].$('td[name = "nombre"]');
+        await Promise.all([page.waitForNavigation(), pacient.click()]);
         sleep(3);
 
-        page.locator('input[name="dni"]').type('111111A');
-        page.locator('input[name="nombre"]').type('PABLO');
-        page.locator('input[name="edad"]').type('22');
-        page.locator('input[name="cita"]').type('CARDIOLOGÍA');
-
-        const createButton = page.locator('button[type=submit]');
-        sleep(3);
-        await Promise.all([page.waitForNavigation(), createButton.click()]);
-
-        //Comprobar que se ha redirigido a la página de pacientes
-        check(page, {
-            'createdPaciente': p => p.locator('h2').textContent() == 'Listado de pacientes',
-        });
+        let viewImageButton = page.$$('table tbody tr')[0].$('button[name = "view"]');
+        await Promise.all([page.waitForNavigation(), viewImageButton.click()]);
         sleep(3);
 
-        let len = page.$$("table tbody tr").length;
+        let informeButton = page.$('button[name = "add"]');
+        await Promise.all([page.waitForNavigation(), informeButton.click()]);
 
-        //Comprobamos que se ha añadido el paciente
-        check(page, {
-            'pacienteAñadido': p => parseInt(p.$$("table tbody tr")[0]
-            .$('td[name="dni"]').textContent()) == 111111,
-        });
         sleep(3);
         
+        page.locator('textarea[id="mat-input-4"]').type('No tiene cancer');
+        let saveButton = page.locator('button[name=save]');
+        await Promise.all([page.waitForNavigation(), saveButton.click()]);
+        sleep(3);
+
+        //Comprobar que se ha realizado el informe
+        check(page, {
+            'informe': p => p.locator('span[name = "content"').textContent().includes("No tiene cancer"),
+        });
+        sleep(2);
+
     } finally {
         page.close();
     }
